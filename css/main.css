@@ -1,0 +1,181 @@
+.rhythm_chart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+.rhythm_chart__title {
+  color: rgba(0, 0, 0, 0.4);
+  margin: 0 0 10px;
+}
+.rhythm_chart__content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex: 1 0 auto;
+}
+.rhythm_chart__visualization {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  position: relative;
+}
+.rhythm_chart__visualization > div {
+  min-width: 1px;
+  width: 100%;
+  height: 100%;
+}
+.rhythm_chart__legend-control {
+  padding: 6px 2px 0 0;
+  color: rgba(0, 0, 0, 0.4);
+}
+.rhythm_chart__legend-series {
+  flex-grow: 1;
+}
+.rhythm_chart__legend {
+  display: flex;
+  font-size: 11px;
+  width: 200px;
+  padding: 5px 0;
+  overflow: auto;
+}
+.rhythm_chart__legend_item {
+  cursor: pointer;
+  padding: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+}
+.rhythm_chart__legend_item.disabled {
+  opacity: 0.5;
+}
+.rhythm_chart__legend_item:first-child {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+.rhythm_chart__legend_label {
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.rhythm_chart__legend_label span {
+  color: rgba(0, 0, 0, 0.4);
+  margin-left: 5px;
+}
+.rhythm_chart__legend_value {
+  color: rgba(0, 0, 0, 0.7);
+  margin-left: 3px;
+}
+.rhythm_chart.reversed .rhythm_chart__title {
+  color: rgba(255, 255, 255, 0.6);
+}
+.rhythm_chart.reversed .rhythm_chart__legend-control {
+  color: rgba(255, 255, 255, 0.6);
+}
+.rhythm_chart.reversed .rhythm_chart__legend_item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+.rhythm_chart.reversed .rhythm_chart__legend_item:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+.rhythm_chart.reversed .rhythm_chart__legend_label span {
+  color: rgba(255, 255, 255, 0.6);
+}
+.rhythm_chart.reversed .rhythm_chart__legend_value {
+  color: rgba(255, 255, 255, 0.8);
+}
+.rhythm_metric {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+.rhythm_metric__resize {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  display: flex;
+}
+.rhythm_metric__primary-label {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 0.5em;
+  margin-bottom: 0.25em;
+  line-height: 1em;
+}
+.rhythm_metric__primary-value {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 1em;
+  font-weight: bold;
+  line-height: 1em;
+}
+.rhythm_metric__secondary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.05em;
+}
+.rhythm_metric__secondary-label {
+  font-size: 0.35em;
+  margin-right: 0.3em;
+  color: rgba(0, 0, 0, 0.4);
+  line-height: 1em;
+}
+.rhythm_metric__secondary-value {
+  font-size: 0.35em;
+  color: rgba(0, 0, 0, 0.7);
+  line-height: 1em;
+}
+.rhythm_metric__inner {
+  position: absolute;
+  padding: 0.25em 0.5em 0.5em;
+}
+.rhythm_top_n {
+  position: relative;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+.rhythm_top_n tr:hover td {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.rhythm_top_n__labels,
+.rhythm_top_n__values {
+  text-align: right;
+}
+.rhythm_top_n__label {
+  color: rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+  text-align: right;
+  line-height: 0;
+  padding: 4px 0;
+  vertical-align: middle;
+}
+.rhythm_top_n__value {
+  color: rgba(0, 0, 0, 0.7);
+  text-align: right;
+  line-height: 0;
+  padding: 4px 4px 4px 0;
+  vertical-align: middle;
+}
+.rhythm_top_n__bar {
+  padding: 4px 10px;
+  vertical-align: middle;
+}
+.rhythm_top_n__inner-bar {
+  min-height: 16px;
+}
+.rhythm_top_n.reversed tr:hover td {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.rhythm_top_n.reversed .rhythm_top_n__label {
+  color: rgba(255, 255, 255, 0.6);
+}
+.rhythm_top_n.reversed .rhythm_top_n__value {
+  color: rgba(255, 255, 255, 0.8);
+}

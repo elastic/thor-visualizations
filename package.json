@@ -1,0 +1,72 @@
+{
+  "name": "@elastic/thor-visualizations",
+  "version": "1.0.0",
+  "description": "Visualizations for Thor",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simianhacker/thor-visualizations.git"
+  },
+  "author": "Chris Cowan <chris@elastic.co>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/simianhacker/thor-visualizations/issues"
+  },
+  "files": [
+    "*.md",
+    "dist",
+    "css"
+  ],
+  "peerDependencies": {
+    "react": "^0.14.0 || ^15.0.0",
+    "react-dom": "^0.14 || ^15.0.0-rc || ^15.0"
+  },
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.7.5",
+    "babel-core": "^6.14.0",
+    "babel-eslint": "^5.0.4",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "babel-plugin-dev-expression": "^0.2.1",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-es2015-loose": "^7.0.0",
+    "babel-preset-es2015-loose-native-modules": "^1.0.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-1": "^6.5.0",
+    "babel-register": "^6.7.2",
+    "bundle-loader": "^0.5.4",
+    "color": "^0.11.3",
+    "css-loader": "^0.25.0",
+    "eslint": "^1.10.3",
+    "eslint-plugin-mocha": "1.1.0",
+    "eslint-plugin-react": "^3.16.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-eslint": "^2.0.0",
+    "gulp-less": "^3.1.0",
+    "gulp-webpack": "^1.5.0",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "mkdirp": "^0.5.1",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "react-resizable": "^1.4.2",
+    "reset-css": "^2.0.20160720",
+    "rsync": "^0.4.0",
+    "style-loader": "^0.13.1"
+  },
+  "dependencies": {
+    "flot-charts": "^0.8.3",
+    "jquery": "^2.2.3",
+    "lodash": "^4.13.1",
+    "moment": "^2.13.0",
+    "numeral": "^1.5.3",
+    "react-resize-aware": "^1.0.11",
+    "reactcss": "^1.0.7"
+  },
+  "homepage": "https://github.com/simianhacker/thor-visualizations#readme"
+}

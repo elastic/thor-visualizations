@@ -1,0 +1,56 @@
+@import '../../less/includes/colors.less';
+@import '../../../node_modules/reset-css/reset.less';
+@import '../../../node_modules/react-resizable/css/styles.css';
+@import '../../less/main.less';
+
+body, html {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  background-color: @white;
+}
+
+#rhythm-visualizations {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  align-items: center;
+}
+
+
+
+h1, h2, h3, h4, h5, h6, p {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.5em;
+  color: @gray;
+}
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  width: 920px;
+  padding: 20px;
+  background-color: @grayLightest;
+}
+
+.examples__box {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  background-color: @white;
+  padding: 10px;
+  width: 900px;
+  height: 300px;
+}
