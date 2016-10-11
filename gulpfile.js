@@ -8,15 +8,7 @@ const mkdirp = require('mkdirp');
 const webpack = require('gulp-webpack');
 
 const syncDestinations = [
-  // '../alerts/node_modules/' + pkg.name,
   '../thor/node_modules/' + pkg.name
-];
-
-const include = [
-  'package.json',
-  'README.md',
-  'dist',
-  'css'
 ];
 
 const exclude = [
@@ -36,38 +28,44 @@ Object.keys(pkg.peerDependencies).forEach((name) => {
   exclude.push(path.join('node_modules', name));
 });
 
-function syncPluginTo(dest, done) {
-  return new Promise((resolve, reject) => {
-    mkdirp(dest, function (err) {
-      if (err) return reject(err);
+function syncPluginTo(excludeFiles) {
+  return function (dest) {
+    return new Promise((resolve, reject) => {
+      mkdirp(dest, function (err) {
+        if (err) return reject(err);
 
-      const source = path.resolve(__dirname) + '/';
-      const rsync = new Rsync();
+        const source = path.resolve(__dirname) + '/';
+        const rsync = new Rsync();
 
-      rsync.source(source)
-      .destination(dest)
-      .flags('uav')
-      .recursive(true)
-      .set('delete')
-      .include(include)
-      .exclude(exclude)
-      .output(function (data) {
-        process.stdout.write(data.toString('utf8'));
-      });
+        rsync.source(source)
+          .destination(dest)
+          .flags('uav')
+          .recursive(true)
+          .set('delete')
+          .exclude(excludeFiles)
+          .output(function (data) {
+            process.stdout.write(data.toString('utf8'));
+          });
 
-      rsync.execute(function (err) {
-        if (err) {
-          console.log(err);
-          return reject(err);
-        }
-        resolve();
+        rsync.execute(function (err) {
+          if (err) {
+            console.log(err);
+            return reject(err);
+          }
+          resolve();
+        });
       });
     });
-  });
+  };
 }
 
 gulp.task('sync', function (done) {
-  Promise.all(syncDestinations.map(syncPluginTo)).then(() => done()).catch(done);
+
+  const examplesExclude = exclude.filter(r => r !== 'examples');
+  Promise.all(syncDestinations.map(syncPluginTo(exclude)))
+    .then(syncPluginTo(examplesExclude)('../simianhacker.github.io/thor-visualizations'))
+    .then(() => done())
+    .catch(done);
 });
 
 gulp.task('js', () => {
