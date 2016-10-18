@@ -65,6 +65,7 @@ export default React.createClass({
           minConstraints={[200,150]}
           maxConstraints={[900,300]}>
           <Timeseries
+            crosshair={true}
             tickFormatter={tickFormatter}
             series={lineChartSeries} />
         </ResizableBox>
@@ -77,6 +78,7 @@ export default React.createClass({
           minConstraints={[200,150]}
           maxConstraints={[900,300]}>
           <Timeseries
+            crosshair={true}
             reversed={true}
             tickFormatter={tickFormatter}
             series={areaChartSeries} />

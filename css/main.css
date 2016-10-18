@@ -47,6 +47,7 @@
   padding: 5px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   display: flex;
+  max-width: 170px;
 }
 .rhythm_chart__legend_item.disabled {
   opacity: 0.5;
