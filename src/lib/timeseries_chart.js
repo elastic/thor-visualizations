@@ -128,7 +128,7 @@ const Chart = React.createClass({
         borderWidth: 1,
         borderColor: lineColor,
         hoverable: true,
-        mouseActiveRadius: 50
+        mouseActiveRadius: 200
       }
     };
 
@@ -331,6 +331,8 @@ export default React.createClass({
         },
         date: {
           color: this.props.reversed ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)',
+          fontSize: '12px',
+          lineHeight: '12px'
         },
         items: {
           display: 'flex',
@@ -338,13 +340,17 @@ export default React.createClass({
         },
         text: {
           whiteSpace: 'nowrap',
+          fontSize: '12px',
+          lineHeight: '12px',
           marginRight: 5
         },
         icon: {
           marginRight: 5
         },
         value: {
+          fontSize: '12px',
           flexShrink: 0,
+          lineHeight: '12px',
           marginLeft: 5
         }
       },

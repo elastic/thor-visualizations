@@ -1,5 +1,5 @@
 import _ from 'lodash';
-export default (data) => {
+export default (data, lookback = 2) => {
   if (_.isNumber(data)) return data;
   if (!Array.isArray(data)) return 0;
   // First try the last value
@@ -9,7 +9,12 @@ export default (data) => {
 
   // If the last value is zero or null because of a partial bucket or
   // some kind of timeshift weirdness we will show the second to last.
-  const secondToLast = data[data.length - 2];
-  return _.isArray(secondToLast) && secondToLast[1] || 0;
+  let lookbackCounter = 1;
+  let value;
+  while (lookback > lookbackCounter && !value) {
+    const next = data[data.length - ++lookbackCounter];
+    value =  _.isArray(next) && next[1] || 0;
+  }
+  return value || 0;
 };
 

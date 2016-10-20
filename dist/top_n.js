@@ -2,9 +2,15 @@
 
 exports.__esModule = true;
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
 
 var _get_last_value = require('./get_last_value');
 
@@ -67,18 +73,34 @@ exports.default = _react2.default.createClass({
       );
     };
   },
-  renderRow: function renderRow(maxValue) {
+  handleClick: function handleClick(item) {
     var _this3 = this;
+
+    return function (e) {
+      if (_this3.props.onClick) {
+        _this3.props.onClick(item);
+      }
+    };
+  },
+  renderRow: function renderRow(maxValue) {
+    var _this4 = this;
 
     return function (item) {
       var key = '' + (item.id || item.label);
-      var lastValue = (0, _get_last_value2.default)(item.data);
-      var value = _this3.props.tickFormatter(lastValue);
+      var lastValue = (0, _get_last_value2.default)(item.data, item.data.length);
+      var formatter = item.tickFormatter || _this4.props.tickFormatter;
+      var value = formatter(lastValue);
       var width = 100 * (lastValue / maxValue) + '%';
       var backgroundColor = item.color;
+      var style = {};
+      if (_this4.props.onClick) {
+        style.cursor = 'pointer';
+      };
       return _react2.default.createElement(
         'tr',
-        { key: key },
+        { key: key,
+          onClick: _this4.handleClick(_extends({ lastValue: lastValue }, item)),
+          style: style },
         _react2.default.createElement(
           'td',
           { width: '1*', className: 'rhythm_top_n__label' },
@@ -99,12 +121,15 @@ exports.default = _react2.default.createClass({
     };
   },
   render: function render() {
+    if (!this.props.series) return _react2.default.createElement('div', { style: { display: 'none' } });
     var maxValue = this.props.series.reduce(function (max, series) {
-      var lastValue = (0, _get_last_value2.default)(series.data);
+      var lastValue = (0, _get_last_value2.default)(series.data, series.data.length);
       return lastValue > max ? lastValue : max;
     }, 0);
 
-    var rows = this.props.series.map(this.renderRow(maxValue));
+    var rows = _lodash2.default.sortBy(this.props.series, function (s) {
+      return (0, _get_last_value2.default)(s.data, s.data.length);
+    }).reverse().map(this.renderRow(maxValue));
     var className = 'rhythm_top_n';
     if (this.props.reversed) {
       className += ' reversed';

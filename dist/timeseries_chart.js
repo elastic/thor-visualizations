@@ -157,7 +157,7 @@ var Chart = _react2.default.createClass({
         borderWidth: 1,
         borderColor: lineColor,
         hoverable: true,
-        mouseActiveRadius: 50
+        mouseActiveRadius: 200
       }
     };
 
@@ -386,7 +386,9 @@ exports.default = _react2.default.createClass({
           color: this.props.reversed ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)'
         },
         date: {
-          color: this.props.reversed ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'
+          color: this.props.reversed ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)',
+          fontSize: '12px',
+          lineHeight: '12px'
         },
         items: {
           display: 'flex',
@@ -394,13 +396,17 @@ exports.default = _react2.default.createClass({
         },
         text: {
           whiteSpace: 'nowrap',
+          fontSize: '12px',
+          lineHeight: '12px',
           marginRight: 5
         },
         icon: {
           marginRight: 5
         },
         value: {
+          fontSize: '12px',
           flexShrink: 0,
+          lineHeight: '12px',
           marginLeft: 5
         }
       },

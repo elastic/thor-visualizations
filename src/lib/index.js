@@ -8,9 +8,11 @@ import Timeseries from './timeseries';
 import Metric from './metric';
 import Gauge from './gauge';
 import CircleGauge from './circle_gauge';
+import TopN from './top_n';
 
 export default {
   // visualizations
+  TopN,
   Timeseries,
   Gauge,
   CircleGauge,

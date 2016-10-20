@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import getLastValue from './get_last_value';
 export default React.createClass({
 
@@ -45,15 +46,30 @@ export default React.createClass({
     };
   },
 
+  handleClick(item) {
+    return (e) => {
+      if (this.props.onClick) {
+        this.props.onClick(item);
+      }
+    };
+  },
+
   renderRow(maxValue) {
     return item => {
       const key = `${item.id || item.label}`;
-      const lastValue = getLastValue(item.data);
-      const value = this.props.tickFormatter(lastValue);
+      const lastValue = getLastValue(item.data, item.data.length);
+      const formatter = item.tickFormatter || this.props.tickFormatter;
+      const value = formatter(lastValue);
       const width = `${100 * (lastValue / maxValue)}%`;
       const backgroundColor = item.color;
+      const style = {};
+      if (this.props.onClick) {
+        style.cursor = 'pointer';
+      };
       return (
-        <tr key={key}>
+        <tr key={key}
+          onClick={this.handleClick({ lastValue, ...item})}
+          style={style}>
           <td width="1*" className="rhythm_top_n__label">{ item.label }</td>
           <td width="100%" className="rhythm_top_n__bar">
             <div className="rhythm_top_n__inner-bar"
@@ -66,12 +82,15 @@ export default React.createClass({
   },
 
   render() {
+    if (!this.props.series) return (<div style={{display: 'none'}}/>);
     const maxValue = this.props.series.reduce((max, series) => {
-      const lastValue = getLastValue(series.data);
+      const lastValue = getLastValue(series.data, series.data.length);
       return lastValue > max ? lastValue : max;
     }, 0);
 
-    const rows = this.props.series.map(this.renderRow(maxValue));
+    const rows = _.sortBy(this.props.series, s => getLastValue(s.data, s.data.length))
+      .reverse()
+      .map(this.renderRow(maxValue));
     let className = 'rhythm_top_n';
     if (this.props.reversed) {
       className += ' reversed';
