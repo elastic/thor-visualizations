@@ -31,6 +31,7 @@
 .rhythm_chart__legend-control {
   padding: 6px 2px 0 0;
   color: rgba(0, 0, 0, 0.4);
+  font-size: 12px;
 }
 .rhythm_chart__legend-series {
   flex-grow: 1;
@@ -85,6 +86,36 @@
 }
 .rhythm_chart.reversed .rhythm_chart__legend_value {
   color: rgba(255, 255, 255, 0.8);
+}
+.rhythm_chart__legend-horizontal,
+.rhythm_chart.reversed .rhythm_chart__legend-horizontal {
+  width: auto;
+  display: flex;
+}
+.rhythm_chart__legend-horizontal .rhythm_chart__legend-control,
+.rhythm_chart.reversed .rhythm_chart__legend-horizontal .rhythm_chart__legend-control {
+  padding: 5px 5px 0 0;
+}
+.rhythm_chart__legend-horizontal .rhythm_chart__legend-series,
+.rhythm_chart.reversed .rhythm_chart__legend-horizontal .rhythm_chart__legend-series {
+  display: flex;
+  flex-wrap: wrap;
+}
+.rhythm_chart__legend-horizontal .rhythm_chart__legend_label,
+.rhythm_chart.reversed .rhythm_chart__legend-horizontal .rhythm_chart__legend_label {
+  flex: 0 1 auto;
+}
+.rhythm_chart__legend-horizontal .rhythm_chart__legend_item,
+.rhythm_chart.reversed .rhythm_chart__legend-horizontal .rhythm_chart__legend_item {
+  max-width: inherit;
+  font-size: 12px;
+  display: flex;
+  margin-right: 10px;
+  border-bottom: none;
+}
+.rhythm_chart__legend-horizontal .rhythm_chart__legend_item:first-child,
+.rhythm_chart.reversed .rhythm_chart__legend-horizontal .rhythm_chart__legend_item:first-child {
+  border-top: none;
 }
 .rhythm_metric {
   position: relative;

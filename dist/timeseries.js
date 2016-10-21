@@ -28,6 +28,10 @@ var _timeseries_chart = require('./timeseries_chart');
 
 var _timeseries_chart2 = _interopRequireDefault(_timeseries_chart);
 
+var _legend = require('./legend');
+
+var _legend2 = _interopRequireDefault(_legend);
+
 var _events = require('./events');
 
 var _events2 = _interopRequireDefault(_events);
@@ -49,10 +53,6 @@ exports.default = _react2.default.createClass({
   getDefaultProps: function getDefaultProps() {
     return { legend: true };
   },
-  format: function format(value) {
-    if (_lodash2.default.isFunction(this.props.tickFormatter)) return this.props.tickFormatter(value);
-    return value;
-  },
   filterLegend: function filterLegend(id) {
     if (!_lodash2.default.has(this.state.values, id)) return [];
     var notAllShown = _lodash2.default.keys(this.state.values).length !== this.state.show.length;
@@ -72,40 +72,6 @@ exports.default = _react2.default.createClass({
       this.props.onFilter(show);
     }
     _events2.default.trigger('toggleFilter', id, this);
-  },
-  createSeries: function createSeries(row, i) {
-    var _this = this;
-
-    var formatter = row.tickFormatter || this.format;
-    var value = formatter(this.state.values[row.id]);
-    var classes = ['rhythm_chart__legend_item'];
-    var key = row.id;
-    if (!_lodash2.default.includes(this.state.show, row.id)) classes.push('disabled');
-    if (!row.label || row.legend === false) return _react2.default.createElement('div', { key: key, style: { display: 'none' } });
-    return _react2.default.createElement(
-      'div',
-      {
-        className: classes.join(' '),
-        onClick: function onClick(event) {
-          return _this.toggleFilter(event, row.id);
-        },
-        key: key },
-      _react2.default.createElement(
-        'div',
-        { className: 'rhythm_chart__legend_label' },
-        _react2.default.createElement('i', { className: 'fa fa-circle', style: { color: row.color } }),
-        _react2.default.createElement(
-          'span',
-          null,
-          row.label
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'rhythm_chart__legend_value' },
-        value
-      )
-    );
   },
   getLastValues: function getLastValues(props) {
     props = props || this.props;
@@ -162,25 +128,20 @@ exports.default = _react2.default.createClass({
     this.setState({ showLegend: !this.state.showLegend });
   },
   render: function render() {
-    var rows = this.props.series.map(this.createSeries);
-    var legendStyle = {};
-    var legendControlClass = 'fa fa-chevron-right';
-    var legnedWidth = 200;
-    if (!this.state.showLegend) {
-      legnedWidth = 12;
-      legendStyle.display = 'none';
-      legendControlClass = 'fa fa-chevron-left';
-    }
     var className = 'rhythm_chart';
     if (this.props.reversed) {
       className += ' reversed';
+    }
+    var style = {};
+    if (this.props.legendPosition === 'bottom') {
+      style.flexDirection = 'column';
     }
     return _react2.default.createElement(
       'div',
       { className: className },
       _react2.default.createElement(
         'div',
-        { className: 'rhythm_chart__content' },
+        { style: style, className: 'rhythm_chart__content' },
         _react2.default.createElement(
           'div',
           { className: 'rhythm_chart__visualization' },
@@ -189,20 +150,13 @@ exports.default = _react2.default.createClass({
             plothover: this.plothover
           }, this.props))
         ),
-        _react2.default.createElement(
-          'div',
-          { className: 'rhythm_chart__legend', style: { width: legnedWidth } },
-          _react2.default.createElement(
-            'div',
-            { className: 'rhythm_chart__legend-control' },
-            _react2.default.createElement('i', { className: legendControlClass, onClick: this.handleHideClick })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'rhythm_chart__legend-series', style: legendStyle },
-            rows
-          )
-        )
+        _react2.default.createElement(_legend2.default, _extends({
+          showLegend: this.state.showLegend,
+          seriesFilter: this.state.show,
+          seriesValues: this.state.values,
+          onClick: this.handleHideClick,
+          onToggle: this.toggleFilter
+        }, this.props))
       )
     );
   }

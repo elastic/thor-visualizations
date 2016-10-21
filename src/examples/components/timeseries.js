@@ -65,6 +65,7 @@ export default React.createClass({
           minConstraints={[200,150]}
           maxConstraints={[900,300]}>
           <Timeseries
+            legendPosition="bottom"
             crosshair={true}
             tickFormatter={tickFormatter}
             series={lineChartSeries} />
@@ -78,6 +79,7 @@ export default React.createClass({
           minConstraints={[200,150]}
           maxConstraints={[900,300]}>
           <Timeseries
+            legendPosition="left"
             crosshair={true}
             reversed={true}
             tickFormatter={tickFormatter}

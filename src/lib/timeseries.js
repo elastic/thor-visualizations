@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import $ from './flot';
 import getLastValue from './get_last_value';
 import TimeseriesChart from './timeseries_chart';
+import Legend from './legend';
 import eventBus from './events';
 export default React.createClass({
   getInitialState() {
@@ -19,11 +20,6 @@ export default React.createClass({
 
   getDefaultProps() {
     return { legend: true };
-  },
-
-  format(value) {
-    if (_.isFunction(this.props.tickFormatter)) return this.props.tickFormatter(value);
-    return value;
   },
 
   filterLegend(id) {
@@ -46,27 +42,6 @@ export default React.createClass({
       this.props.onFilter(show);
     }
     eventBus.trigger('toggleFilter', id, this);
-  },
-
-  createSeries(row, i) {
-    const formatter = row.tickFormatter || this.format;
-    const value = formatter(this.state.values[row.id]);
-    const classes = ['rhythm_chart__legend_item'];
-    const key = row.id;
-    if (!_.includes(this.state.show, row.id)) classes.push('disabled');
-    if (!row.label || row.legend === false) return (<div key={ key } style={{display: 'none'}}/>);
-    return (
-      <div
-        className={ classes.join(' ') }
-        onClick={ event => this.toggleFilter(event, row.id) }
-        key={ key }>
-        <div className="rhythm_chart__legend_label">
-          <i className="fa fa-circle" style={{ color: row.color }}></i>
-          <span>{ row.label }</span>
-        </div>
-        <div className="rhythm_chart__legend_value">{ value }</div>
-      </div>
-    );
   },
 
   getLastValues(props) {
@@ -127,36 +102,30 @@ export default React.createClass({
   },
 
   render() {
-    const rows = this.props.series.map(this.createSeries);
-    const legendStyle = { };
-    let legendControlClass = 'fa fa-chevron-right';
-    let legnedWidth = 200;
-    if (!this.state.showLegend) {
-      legnedWidth = 12;
-      legendStyle.display = 'none';
-      legendControlClass = 'fa fa-chevron-left';
-    }
     let className = 'rhythm_chart';
     if (this.props.reversed) {
       className += ' reversed';
     }
+    const style = {};
+    if (this.props.legendPosition === 'bottom') {
+      style.flexDirection = 'column';
+    }
     return (
       <div className={className}>
-        <div className="rhythm_chart__content">
+        <div style={style} className="rhythm_chart__content">
           <div className="rhythm_chart__visualization">
             <TimeseriesChart
               show={ this.state.show }
               plothover={ this.plothover}
               {...this.props}/>
           </div>
-          <div className="rhythm_chart__legend" style={{width: legnedWidth}}>
-            <div className="rhythm_chart__legend-control">
-              <i className={legendControlClass} onClick={this.handleHideClick}/>
-            </div>
-            <div className="rhythm_chart__legend-series" style={legendStyle}>
-              { rows }
-           </div>
-          </div>
+          <Legend
+            showLegend={this.state.showLegend}
+            seriesFilter={this.state.show}
+            seriesValues={this.state.values}
+            onClick={this.handleHideClick}
+            onToggle={this.toggleFilter}
+            {...this.props}/>
         </div>
       </div>
     );

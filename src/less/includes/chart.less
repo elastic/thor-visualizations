@@ -35,6 +35,7 @@
 .rhythm_chart__legend-control {
   padding: 6px 2px 0 0;
   color: @textColor;
+  font-size: 12px;
 }
 
 .rhythm_chart__legend-series {
@@ -87,4 +88,28 @@
   }
   .rhythm_chart__legend_label { span { color: @textColorReversed; } }
   .rhythm_chart__legend_value { color: @valueColorReversed; }
+}
+
+.rhythm_chart__legend-horizontal,
+.rhythm_chart.reversed .rhythm_chart__legend-horizontal {
+  width: auto;
+  display: flex;
+  .rhythm_chart__legend-control {
+    padding: 5px 5px 0 0;
+  }
+  .rhythm_chart__legend-series {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .rhythm_chart__legend_label {
+    flex: 0 1 auto;
+  }
+  .rhythm_chart__legend_item {
+    max-width: inherit;
+    font-size: 12px;
+    display: flex;
+    margin-right: 10px;
+    border-bottom: none;
+    &:first-child { border-top: none; }
+  }
 }
