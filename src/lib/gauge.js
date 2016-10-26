@@ -22,7 +22,7 @@ class Gauge extends Component {
   }
 
   render() {
-    const value = getLastValue(this.props.metrics);
+    const value = getLastValue(this.props.metric.data);
     const titleFontSize = this.height * 0.3;
     const labelFontSize = this.height * 0.3;
     const gaugeProps = {

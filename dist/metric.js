@@ -120,7 +120,7 @@ exports.default = _react2.default.createClass({
     var top = _state.top;
     var left = _state.left;
 
-    var primaryFormatter = metric && metric.formatter || function (n) {
+    var primaryFormatter = metric && (metric.tickFormatter || metric.formatter) || function (n) {
       return n;
     };
     var primaryValue = primaryFormatter((0, _get_last_value2.default)(metric && metric.data || 0));

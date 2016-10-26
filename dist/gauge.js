@@ -56,7 +56,7 @@ var Gauge = function (_Component) {
   };
 
   Gauge.prototype.render = function render() {
-    var value = (0, _get_last_value2.default)(this.props.metrics);
+    var value = (0, _get_last_value2.default)(this.props.metric.data);
     var titleFontSize = this.height * 0.3;
     var labelFontSize = this.height * 0.3;
     var gaugeProps = {

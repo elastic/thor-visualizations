@@ -2,6 +2,7 @@ import React from 'react';
 import Timeseries from './timeseries';
 import Metrics from './metrics';
 import TopN from './top_n';
+import Gauge from './gauge';
 export default (props) => {
   return (
     <div className="examples">
@@ -10,6 +11,7 @@ export default (props) => {
         <Timeseries/>
         <Metrics/>
         <TopN/>
+        <Gauge/>
       </div>
     </div>
   );
