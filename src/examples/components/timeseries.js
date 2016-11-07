@@ -65,6 +65,7 @@ export default React.createClass({
           minConstraints={[200,150]}
           maxConstraints={[900,300]}>
           <Timeseries
+            onBrush={_.noop}
             legendPosition="bottom"
             crosshair={true}
             tickFormatter={tickFormatter}
@@ -79,6 +80,7 @@ export default React.createClass({
           minConstraints={[200,150]}
           maxConstraints={[900,300]}>
           <Timeseries
+            onBrush={_.noop}
             legendPosition="left"
             crosshair={true}
             reversed={true}

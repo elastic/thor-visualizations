@@ -42,9 +42,10 @@ const Chart = React.createClass({
     if (this.props.onMouseLeave) $(target).on('mouseleave', this.handleMouseLeave);
     if (this.props.onBrush) $(target).off('plotselected', this.brushChart);
     this.plot.shutdown();
-    if (this.props.onCrosshair) {
+    if (this.props.crosshair) {
       $(target).off('plothover', this.handlePlotover);
       eventBus.off('thorPlotover', this.handleThorPlotover);
+      eventBus.off('thorPlotleave', this.handleThorPlotleave);
     }
   },
 
@@ -132,6 +133,14 @@ const Chart = React.createClass({
       }
     };
 
+    if (this.props.crosshair) {
+      _.set(opts, 'crosshair', {
+        mode: 'x',
+        color: this.props.reversed ? '#FFF' : '#000',
+        lineWidth: 2
+      });
+    }
+
     if (this.props.onBrush) {
       _.set(opts, 'selection', { mode: 'x', color: textColor });
     }
@@ -164,25 +173,28 @@ const Chart = React.createClass({
 
     this.handleMouseLeave = (...args) => {
       if (this.props.onMouseLeave) this.props.onMouseLeave(...args, this.plot);
-      if (this.props.onCrosshair) this.props.onCrosshair();
     };
 
     $(target).on('plothover', this.handleMouseOver);
     $(target).on('mouseleave', this.handleMouseLeave);
 
-    if (this.props.onCrosshair) {
+    if (this.props.crosshair) {
 
-      this.handlePlotover = (e, pos, item) => {
-        eventBus.trigger('thorPlotover', [pos, item, this.plot]);
-      };
-      $(target).on('plothover', this.handlePlotover);
 
       this.handleThorPlotover = (e, pos, item, originalPlot) => {
         if (this.plot !== originalPlot) {
-          this.props.onCrosshair(pos, item, this.plot, originalPlot);
+          this.plot.setCrosshair({ x: _.get(pos, 'x') });
         }
       };
+
+      this.handlePlotover = (e, pos, item) => eventBus.trigger('thorPlotover', [pos, item, this.plot]);
+      this.handlePlotleave = (e) => eventBus.trigger('thorPlotleave');
+      this.handleThorPlotleave = (e) =>  this.plot.clearCrosshair();
+
+      $(target).on('plothover', this.handlePlotover);
+      $(target).on('mouseleave', this.handlePlotleave);
       eventBus.on('thorPlotover', this.handleThorPlotover);
+      eventBus.on('thorPlotleave', this.handleThorPlotleave);
     }
 
     if (_.isFunction(this.props.plothover)) {
@@ -190,7 +202,7 @@ const Chart = React.createClass({
     }
 
     $(target).on('mouseleave', (e) => {
-      eventBus.trigger('rhythmPlotLeave');
+      eventBus.trigger('thorPlotleave');
     });
 
     if (_.isFunction(this.props.onBrush)) {
@@ -200,10 +212,6 @@ const Chart = React.createClass({
       };
       $(target).on('plotselected', this.brushChart);
     }
-
-    this.state = {
-      crosshair: { x: null, y: null }
-    };
 
   },
 
@@ -225,7 +233,10 @@ const Chart = React.createClass({
 export default React.createClass({
 
   getInitialState() {
-    return { show: false };
+    return {
+      showTooltip: false,
+      mouseHoverTimer: false,
+    };
   },
 
   calculateLeftRight(item, plot) {
@@ -247,70 +258,47 @@ export default React.createClass({
   },
 
   handleMouseOver(e, pos, item, plot) {
+
+    if (typeof this.state.mouseHoverTimer === 'number') {
+      window.clearTimeout(this.state.mouseHoverTimer);
+    }
+
     if (item) {
       const plotOffset = plot.getPlotOffset();
       const point = plot.pointOffset({ x: item.datapoint[0], y: item.datapoint[1]});
       const [left, right ] = this.calculateLeftRight(item, plot);
       const top = point.top;
       this.setState({
-        show: true,
+        showTooltip: true,
         item,
         left,
         right,
-        crosshairRight: right,
-        crosshairLeft: left,
         top: top + 10,
         bottom: plotOffset.bottom
       });
     }
   },
 
-  handleCrosshair(pos, item, plot) {
-    if (item) {
-      const series = this.props.series[0];
-      const [left, right] = this.calculateLeftRight(item, plot);
-      this.setState({
-        showCrosshair: true,
-        crosshairLeft: left,
-        crosshairRight: right
-      });
-    } else {
-      this.setState({ showCrosshair: false });
-    }
-  },
-
   handleMouseLeave(e, plot) {
-    this.setState({ show: false });
+    this.state.mouseHoverTimer = window.setTimeout(() => {
+      this.setState({ showTooltip: false });
+    }, 250);
   },
 
   render() {
-    const { item, right, top, left, crosshairLeft, crosshairRight } = this.state;
+    const { item, right, top, left } = this.state;
     const { series } = this.props;
     let tooltip;
-    let crosshair;
-
-    const showCrosshair = this.state.showCrosshair || this.state.show;
 
     const styles = reactcss({
-      showCrosshair: {
-        crosshair: {
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: crosshairLeft,
-          right: crosshairRight,
-          width: '2px',
-          backgroundColor: this.props.reversed ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)',
-          zIndex: 500001
-        },
-      },
-      show: {
+      showTooltip: {
         tooltipContainer: {
+          pointerEvents: 'none',
           position: 'absolute',
           top: top - 26,
           left,
           right,
-          zIndex: 50000,
+          zIndex: 100,
           display: 'flex',
           alignItems: 'center'
         },
@@ -354,13 +342,13 @@ export default React.createClass({
           marginLeft: 5
         }
       },
-      hide: {
+      hideTooltip: {
         tooltipContainer: { display: 'none' },
-      },
-      hideCrosshair: {
-        crosshair: { display: 'none' }
       }
-    }, { show: this.state.show, hide: !this.state.show, showCrosshair, hideCrosshair: !showCrosshair });
+    }, {
+      showTooltip: this.state.showTooltip,
+      hideTooltip: !this.state.showTooltip,
+    });
 
     if (item) {
       const metric = series.find(r => r.id === item.series.id);
@@ -386,10 +374,6 @@ export default React.createClass({
 
     }
 
-    crosshair = (
-      <div style={styles.crosshair}></div>
-    );
-
     const container = {
       display: 'flex',
       rowDirection: 'column',
@@ -404,14 +388,9 @@ export default React.createClass({
       ...this.props
     };
 
-    if (this.props.crosshair) {
-      params.onCrosshair = this.handleCrosshair;
-    }
-
     return (
       <div ref="container" style={container}>
         { tooltip }
-        { crosshair }
         <Chart {...params}/>
       </div>
     );

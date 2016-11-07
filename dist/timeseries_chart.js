@@ -74,9 +74,10 @@ var Chart = _react2.default.createClass({
     if (this.props.onMouseLeave) (0, _flot2.default)(target).on('mouseleave', this.handleMouseLeave);
     if (this.props.onBrush) (0, _flot2.default)(target).off('plotselected', this.brushChart);
     this.plot.shutdown();
-    if (this.props.onCrosshair) {
+    if (this.props.crosshair) {
       (0, _flot2.default)(target).off('plothover', this.handlePlotover);
       _events2.default.off('thorPlotover', this.handleThorPlotover);
+      _events2.default.off('thorPlotleave', this.handleThorPlotleave);
     }
   },
   componentWillUnmount: function componentWillUnmount() {
@@ -161,6 +162,14 @@ var Chart = _react2.default.createClass({
       }
     };
 
+    if (this.props.crosshair) {
+      _lodash2.default.set(opts, 'crosshair', {
+        mode: 'x',
+        color: this.props.reversed ? '#FFF' : '#000',
+        lineWidth: 2
+      });
+    }
+
     if (this.props.onBrush) {
       _lodash2.default.set(opts, 'selection', { mode: 'x', color: textColor });
     }
@@ -210,25 +219,33 @@ var Chart = _react2.default.createClass({
       }
 
       if (_this2.props.onMouseLeave) (_props3 = _this2.props).onMouseLeave.apply(_props3, args.concat([_this2.plot]));
-      if (_this2.props.onCrosshair) _this2.props.onCrosshair();
     };
 
     (0, _flot2.default)(target).on('plothover', this.handleMouseOver);
     (0, _flot2.default)(target).on('mouseleave', this.handleMouseLeave);
 
-    if (this.props.onCrosshair) {
-
-      this.handlePlotover = function (e, pos, item) {
-        _events2.default.trigger('thorPlotover', [pos, item, _this2.plot]);
-      };
-      (0, _flot2.default)(target).on('plothover', this.handlePlotover);
+    if (this.props.crosshair) {
 
       this.handleThorPlotover = function (e, pos, item, originalPlot) {
         if (_this2.plot !== originalPlot) {
-          _this2.props.onCrosshair(pos, item, _this2.plot, originalPlot);
+          _this2.plot.setCrosshair({ x: _lodash2.default.get(pos, 'x') });
         }
       };
+
+      this.handlePlotover = function (e, pos, item) {
+        return _events2.default.trigger('thorPlotover', [pos, item, _this2.plot]);
+      };
+      this.handlePlotleave = function (e) {
+        return _events2.default.trigger('thorPlotleave');
+      };
+      this.handleThorPlotleave = function (e) {
+        return _this2.plot.clearCrosshair();
+      };
+
+      (0, _flot2.default)(target).on('plothover', this.handlePlotover);
+      (0, _flot2.default)(target).on('mouseleave', this.handlePlotleave);
       _events2.default.on('thorPlotover', this.handleThorPlotover);
+      _events2.default.on('thorPlotleave', this.handleThorPlotleave);
     }
 
     if (_lodash2.default.isFunction(this.props.plothover)) {
@@ -236,7 +253,7 @@ var Chart = _react2.default.createClass({
     }
 
     (0, _flot2.default)(target).on('mouseleave', function (e) {
-      _events2.default.trigger('rhythmPlotLeave');
+      _events2.default.trigger('thorPlotleave');
     });
 
     if (_lodash2.default.isFunction(this.props.onBrush)) {
@@ -246,10 +263,6 @@ var Chart = _react2.default.createClass({
       };
       (0, _flot2.default)(target).on('plotselected', this.brushChart);
     }
-
-    this.state = {
-      crosshair: { x: null, y: null }
-    };
   },
   render: function render() {
     var style = {
@@ -269,7 +282,10 @@ var Chart = _react2.default.createClass({
 exports.default = _react2.default.createClass({
   displayName: 'timeseries_chart',
   getInitialState: function getInitialState() {
-    return { show: false };
+    return {
+      showTooltip: false,
+      mouseHoverTimer: false
+    };
   },
   calculateLeftRight: function calculateLeftRight(item, plot) {
     var el = this.refs.container;
@@ -289,6 +305,11 @@ exports.default = _react2.default.createClass({
     return [left, right];
   },
   handleMouseOver: function handleMouseOver(e, pos, item, plot) {
+
+    if (typeof this.state.mouseHoverTimer === 'number') {
+      window.clearTimeout(this.state.mouseHoverTimer);
+    }
+
     if (item) {
       var plotOffset = plot.getPlotOffset();
       var point = plot.pointOffset({ x: item.datapoint[0], y: item.datapoint[1] });
@@ -300,37 +321,21 @@ exports.default = _react2.default.createClass({
 
       var top = point.top;
       this.setState({
-        show: true,
+        showTooltip: true,
         item: item,
         left: left,
         right: right,
-        crosshairRight: right,
-        crosshairLeft: left,
         top: top + 10,
         bottom: plotOffset.bottom
       });
     }
   },
-  handleCrosshair: function handleCrosshair(pos, item, plot) {
-    if (item) {
-      var series = this.props.series[0];
-
-      var _calculateLeftRight2 = this.calculateLeftRight(item, plot);
-
-      var left = _calculateLeftRight2[0];
-      var right = _calculateLeftRight2[1];
-
-      this.setState({
-        showCrosshair: true,
-        crosshairLeft: left,
-        crosshairRight: right
-      });
-    } else {
-      this.setState({ showCrosshair: false });
-    }
-  },
   handleMouseLeave: function handleMouseLeave(e, plot) {
-    this.setState({ show: false });
+    var _this3 = this;
+
+    this.state.mouseHoverTimer = window.setTimeout(function () {
+      _this3.setState({ showTooltip: false });
+    }, 250);
   },
   render: function render() {
     var _state = this.state;
@@ -338,35 +343,19 @@ exports.default = _react2.default.createClass({
     var right = _state.right;
     var top = _state.top;
     var left = _state.left;
-    var crosshairLeft = _state.crosshairLeft;
-    var crosshairRight = _state.crosshairRight;
     var series = this.props.series;
 
     var tooltip = void 0;
-    var crosshair = void 0;
-
-    var showCrosshair = this.state.showCrosshair || this.state.show;
 
     var styles = (0, _reactcss2.default)({
-      showCrosshair: {
-        crosshair: {
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: crosshairLeft,
-          right: crosshairRight,
-          width: '2px',
-          backgroundColor: this.props.reversed ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)',
-          zIndex: 500001
-        }
-      },
-      show: {
+      showTooltip: {
         tooltipContainer: {
+          pointerEvents: 'none',
           position: 'absolute',
           top: top - 26,
           left: left,
           right: right,
-          zIndex: 50000,
+          zIndex: 100,
           display: 'flex',
           alignItems: 'center'
         },
@@ -410,13 +399,13 @@ exports.default = _react2.default.createClass({
           marginLeft: 5
         }
       },
-      hide: {
+      hideTooltip: {
         tooltipContainer: { display: 'none' }
-      },
-      hideCrosshair: {
-        crosshair: { display: 'none' }
       }
-    }, { show: this.state.show, hide: !this.state.show, showCrosshair: showCrosshair, hideCrosshair: !showCrosshair });
+    }, {
+      showTooltip: this.state.showTooltip,
+      hideTooltip: !this.state.showTooltip
+    });
 
     if (item) {
       var metric = series.find(function (r) {
@@ -463,8 +452,6 @@ exports.default = _react2.default.createClass({
       );
     }
 
-    crosshair = _react2.default.createElement('div', { style: styles.crosshair });
-
     var container = {
       display: 'flex',
       rowDirection: 'column',
@@ -477,15 +464,10 @@ exports.default = _react2.default.createClass({
       onMouseOver: this.handleMouseOver
     }, this.props);
 
-    if (this.props.crosshair) {
-      params.onCrosshair = this.handleCrosshair;
-    }
-
     return _react2.default.createElement(
       'div',
       { ref: 'container', style: container },
       tooltip,
-      crosshair,
       _react2.default.createElement(Chart, params)
     );
   }
