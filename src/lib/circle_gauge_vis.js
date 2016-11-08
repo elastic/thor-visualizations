@@ -93,28 +93,6 @@ export default React.createClass({
     const percent = value < max ? value / max : 1;
     const styles = reactcss({
       default: {
-        circle: {
-          r: 50,
-          cx: 60,
-          cy: 60,
-          fill: 'rgba(0,0,0,0)',
-          stroke: color,
-          strokeWidth: this.props.gaugeLine,
-          strokeDasharray: `${(percent * sliceSize) * size} ${size}`,
-          transform: 'rotate(-90deg)',
-          transformOrigin: '50% 50%'
-        },
-        circleBackground: {
-          r: 50,
-          cx: 60,
-          cy: 60,
-          fill: 'rgba(0,0,0,0)',
-          stroke: 'rgba(0,0,0,0.2)',
-          strokeDasharray: `${sliceSize * size} ${size}`,
-          strokeWidth: this.props.innerLine,
-          // transform: 'rotate(116deg)',
-          transformOrigin: '50% 50%'
-        },
         resize: {
           position: 'relative',
           display: 'flex',
@@ -123,28 +101,47 @@ export default React.createClass({
         },
         svg: {
           position: 'absolute',
-          width: 120.72,
-          height: 120.72,
           top: this.state.top,
           left: this.state.left,
           transform: `matrix(${scale}, 0, 0, ${scale}, ${translateX}, ${translateY})`
         }
-      },
-      reversed: {
-        circleBackground: {
-          stroke: 'rgba(255,255,255,0.2)',
-        },
       }
     }, this.props);
+
+    const props = {
+      circle: {
+        r: 50,
+        cx: 60,
+        cy: 60,
+        fill: 'rgba(0,0,0,0)',
+        stroke: color,
+        strokeWidth: this.props.gaugeLine,
+        strokeDasharray: `${(percent * sliceSize) * size} ${size}`,
+        transform: 'rotate(-90 60 60)',
+      },
+      circleBackground: {
+        r: 50,
+        cx: 60,
+        cy: 60,
+        fill: 'rgba(0,0,0,0)',
+        stroke: this.props.reversed ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)',
+        strokeDasharray: `${sliceSize * size} ${size}`,
+        strokeWidth: this.props.innerLine,
+        // transform: 'rotate(116 60 60)',
+      }
+    };
+
     if (this.props.innerColor) {
       styles.circleBackground.stroke = this.props.innerColor;
     }
     return (
       <ResizeAware ref="resize" style={styles.resize}>
-        <svg ref="inner" style={styles.svg}>
-          <circle style={styles.circleBackground}/>
-          <circle style={styles.circle}/>
-        </svg>
+        <div style={styles.svg} ref="inner">
+          <svg width={120.72} height={120.72}>
+            <circle {...props.circleBackground}/>
+            <circle {...props.circle}/>
+          </svg>
+        </div>
       </ResizeAware>
     );
   }
