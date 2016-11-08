@@ -165,7 +165,7 @@ exports.default = _react2.default.createClass({
     };
 
     if (this.props.innerColor) {
-      styles.circleBackground.stroke = this.props.innerColor;
+      props.circleBackground.stroke = this.props.innerColor;
     }
     return _react2.default.createElement(
       _reactResizeAware2.default,

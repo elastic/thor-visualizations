@@ -132,7 +132,7 @@ export default React.createClass({
     };
 
     if (this.props.innerColor) {
-      styles.circleBackground.stroke = this.props.innerColor;
+      props.circleBackground.stroke = this.props.innerColor;
     }
     return (
       <ResizeAware ref="resize" style={styles.resize}>

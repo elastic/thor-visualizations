@@ -211,9 +211,6 @@ const Chart = React.createClass({
         this.plot.clearSelection();
       };
 
-      this.hadnleThorPlotselecting = (e, pos) => {
-
-      }
       $(target).on('plotselected', this.brushChart);
     }
 

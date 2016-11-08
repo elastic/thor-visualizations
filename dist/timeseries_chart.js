@@ -262,7 +262,6 @@ var Chart = _react2.default.createClass({
         _this2.plot.clearSelection();
       };
 
-      this.hadnleThorPlotselecting = function (e, pos) {};
       (0, _flot2.default)(target).on('plotselected', this.brushChart);
     }
   },
