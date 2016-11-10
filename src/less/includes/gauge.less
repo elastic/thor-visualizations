@@ -28,6 +28,7 @@
   line-height: 14px;
   text-align: center;
   color: @black;
+  margin-bottom: 3px;
 }
 
 .thorCircleGauge__resize {
@@ -42,6 +43,54 @@
     color: rgba(255,255,255,0.6);
   }
   .thorCircleGauge__value {
+    color: @white;
+  }
+}
+
+.thorHalfGauge {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.thorHalfGauge__metrics {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  display: flex;
+  padding: 10px 10px 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.thorHalfGauge__label {
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  color: rgba(0,0,0,0.4);
+  padding: 0 8px 4px;
+}
+.thorHalfGauge__value {
+  font-size: 24px;
+  line-height: 24px;
+  text-align: center;
+  color: @black;
+}
+
+.thorHalfGauge__resize {
+  position: relative;
+  display: flex;
+  rowDirection: column;
+  flex: 1 0 auto;
+}
+
+.thorHalfGauge.reversed {
+  .thorHalfGauge__label {
+    color: rgba(255,255,255,0.6);
+  }
+  .thorHalfGauge__value {
     color: @white;
   }
 }

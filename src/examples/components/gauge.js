@@ -2,6 +2,7 @@ import React from 'react';
 import { ResizableBox } from 'react-resizable';
 import generateData from '../lib/generate_data';
 import CircleGauge from '../../lib/circle_gauge';
+import HalfGauge from '../../lib/half_gauge';
 import Color from 'color';
 import _ from 'lodash';
 import numeral from 'numeral';
@@ -21,6 +22,12 @@ export default React.createClass({
       label: 'OXYGEN',
       data: [[0,0.2035]],
       color: '#F00'
+    };
+
+    const fuel = {
+      formatter: n => `${numeral(n).format('0.0%')}`,
+      label: 'CO2 Tanks',
+      data: [[0,0.655]],
     };
 
     return (
@@ -46,6 +53,18 @@ export default React.createClass({
             valueColor="#F00"
             reversed={true}
             metric={additional}
+            max={1}/>
+        </ResizableBox>
+        <ResizableBox
+          className="examples__box"
+          width={900}
+          height={300}
+          minConstraints={[200,150]}
+          maxConstraints={[900,300]}
+          style={{ backgroundColor: '#333'}}>
+          <HalfGauge
+            reversed={true}
+            metric={fuel}
             max={1}/>
         </ResizableBox>
       </div>
