@@ -26,7 +26,7 @@ export default React.createClass({
 
     const fuel = {
       formatter: n => `${numeral(n).format('0.0%')}`,
-      label: 'CO2 Tanks',
+      label: 'CO2 Tank Utilization',
       data: [[0,0.655]],
     };
 
@@ -39,7 +39,7 @@ export default React.createClass({
           height={300}
           minConstraints={[200,150]}
           maxConstraints={[900,300]}>
-          <CircleGauge innerLine={12} metric={metric}/>
+          <HalfGauge metric={fuel} max={1}/>
         </ResizableBox>
         <ResizableBox
           className="examples__box"
@@ -60,12 +60,8 @@ export default React.createClass({
           width={900}
           height={300}
           minConstraints={[200,150]}
-          maxConstraints={[900,300]}
-          style={{ backgroundColor: '#333'}}>
-          <HalfGauge
-            reversed={true}
-            metric={fuel}
-            max={1}/>
+          maxConstraints={[900,300]}>
+          <CircleGauge innerLine={12} metric={metric}/>
         </ResizableBox>
       </div>
     );

@@ -137,7 +137,7 @@ const Chart = React.createClass({
       _.set(opts, 'crosshair', {
         mode: 'x',
         color: this.props.reversed ? '#FFF' : '#000',
-        lineWidth: 2
+        lineWidth: 1
       });
     }
 
@@ -296,12 +296,13 @@ export default React.createClass({
         tooltipContainer: {
           pointerEvents: 'none',
           position: 'absolute',
-          top: top - 26,
+          top: top - 28,
           left,
           right,
           zIndex: 100,
           display: 'flex',
-          alignItems: 'center'
+          alignItems: 'center',
+          padding: '0 5px'
         },
         tooltip: {
           backgroundColor: this.props.reversed ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)',

@@ -117,7 +117,7 @@ export default React.createClass({
         stroke: color,
         strokeWidth: this.props.gaugeLine,
         strokeDasharray: `${(percent * sliceSize) * size} ${size}`,
-        transform: 'rotate(-199 60 60)',
+        transform: 'rotate(-197.8 60 60)',
       },
       circleBackground: {
         r: 50,

@@ -18,6 +18,7 @@
   flex: 1 0 auto;
 }
 .rhythm_chart__visualization {
+  cursor: crosshair;
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
@@ -212,6 +213,7 @@
   color: rgba(255, 255, 255, 0.8);
 }
 .thorCircleGauge {
+  font-size: 100%;
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
@@ -229,17 +231,16 @@
 }
 .thorCircleGauge__label {
   font-size: 8px;
-  line-height: 9px;
+  line-height: 1;
   text-align: center;
   color: rgba(0, 0, 0, 0.4);
   padding: 0 8px 8px;
 }
 .thorCircleGauge__value {
   font-size: 14px;
-  line-height: 14px;
+  line-height: 1;
   text-align: center;
   color: black;
-  margin-bottom: 3px;
 }
 .thorCircleGauge__resize {
   position: relative;
@@ -254,6 +255,7 @@
   color: white;
 }
 .thorHalfGauge {
+  font-size: 100%;
   display: flex;
   flex-direction: column;
   flex: 1 0 auto;
@@ -261,24 +263,24 @@
 .thorHalfGauge__metrics {
   position: absolute;
   width: 100px;
-  height: 100px;
+  height: 70px;
   text-align: center;
   display: flex;
-  padding: 10px 10px 20px;
+  padding: 0px 11px 5px;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
 }
 .thorHalfGauge__label {
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 8px;
+  line-height: 1;
   text-align: center;
   color: rgba(0, 0, 0, 0.4);
   padding: 0 8px 4px;
 }
 .thorHalfGauge__value {
-  font-size: 24px;
-  line-height: 24px;
+  font-size: 16px;
+  line-height: 1;
   text-align: center;
   color: black;
 }

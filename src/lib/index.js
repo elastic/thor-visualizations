@@ -8,6 +8,7 @@ import Timeseries from './timeseries';
 import Metric from './metric';
 import Gauge from './gauge';
 import CircleGauge from './circle_gauge';
+import HalfGauge from './half_gauge';
 import TopN from './top_n';
 
 export default {
@@ -16,6 +17,7 @@ export default {
   Timeseries,
   Gauge,
   CircleGauge,
+  HalfGauge,
   Metric,
   // utilities
   getLastValue,
