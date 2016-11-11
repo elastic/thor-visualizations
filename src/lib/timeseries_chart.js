@@ -184,12 +184,16 @@ const Chart = React.createClass({
       this.handleThorPlotover = (e, pos, item, originalPlot) => {
         if (this.plot !== originalPlot) {
           this.plot.setCrosshair({ x: _.get(pos, 'x') });
+          this.props.plothover(e, pos, item);
         }
       };
 
       this.handlePlotover = (e, pos, item) => eventBus.trigger('thorPlotover', [pos, item, this.plot]);
       this.handlePlotleave = (e) => eventBus.trigger('thorPlotleave');
-      this.handleThorPlotleave = (e) =>  this.plot.clearCrosshair();
+      this.handleThorPlotleave = (e) =>  {
+        this.plot.clearCrosshair();
+        if (this.props.plothover) this.props.plothover(e);
+      };
 
       $(target).on('plothover', this.handlePlotover);
       $(target).on('mouseleave', this.handlePlotleave);

@@ -79,6 +79,7 @@ gulp.task('js', () => {
 gulp.task('webpack', () => {
   return gulp.src('src/examples/app.js')
     .pipe(webpack({
+      watch: true,
       devtool: 'eval-source-map',
       output: {
         filename: '[name].js'
@@ -117,5 +118,5 @@ gulp.task('dev', ['build', 'sync'], () => {
   gulp.watch(['package.json', 'dist/**/*', 'css/**/*'], ['sync']);
 });
 
-gulp.task('default', ['build', 'sync', 'webpack']);
+gulp.task('default', ['build', 'sync']);
 

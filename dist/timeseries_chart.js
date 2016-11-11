@@ -229,6 +229,7 @@ var Chart = _react2.default.createClass({
       this.handleThorPlotover = function (e, pos, item, originalPlot) {
         if (_this2.plot !== originalPlot) {
           _this2.plot.setCrosshair({ x: _lodash2.default.get(pos, 'x') });
+          _this2.props.plothover(e, pos, item);
         }
       };
 
@@ -239,7 +240,8 @@ var Chart = _react2.default.createClass({
         return _events2.default.trigger('thorPlotleave');
       };
       this.handleThorPlotleave = function (e) {
-        return _this2.plot.clearCrosshair();
+        _this2.plot.clearCrosshair();
+        if (_this2.props.plothover) _this2.props.plothover(e);
       };
 
       (0, _flot2.default)(target).on('plothover', this.handlePlotover);
