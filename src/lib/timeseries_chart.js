@@ -11,7 +11,8 @@ import colors from './colors';
 
 const Chart = React.createClass({
 
-  componentWillMount(props) {
+  getInitialState() {
+    return { renderFlot: false };
   },
 
   shouldComponentUpdate(props) {
@@ -47,11 +48,11 @@ const Chart = React.createClass({
       eventBus.off('thorPlotover', this.handleThorPlotover);
       eventBus.off('thorPlotleave', this.handleThorPlotleave);
     }
+    findDOMNode(this.refs.resize).removeEventListener('resize', this.handleResize);
   },
 
   componentWillUnmount() {
     this.shutdownChart();
-    findDOMNode(this.refs.resize).removeEventListener('resize', this.handleResize);
   },
 
   filterByShow(show) {
@@ -72,12 +73,13 @@ const Chart = React.createClass({
       this.plot.setData(this.calculateData(series, newProps.show));
       this.plot.setupGrid();
       this.plot.draw();
+    } else {
+      this.renderChart();
     }
   },
 
   componentDidMount() {
     this.renderChart();
-    findDOMNode(this.refs.resize).addEventListener('resize', this.handleResize);
   },
 
   componentDidUpdate() {
@@ -149,75 +151,78 @@ const Chart = React.createClass({
   },
 
   renderChart() {
-    const { min, max } = this.props;
-    const type = this.props.type || 'line';
-    const { target} = this.refs;
-    const { series } = this.props;
-    const parent = $(target.parentElement);
-    const data = this.calculateData(series, this.props.show);
+    const resize = findDOMNode(this.refs.resize);
+    if (resize.clientWidth > 0 && resize.clientHeight > 0) {
+      const { min, max } = this.props;
+      const type = this.props.type || 'line';
+      const { target} = this.refs;
+      const { series } = this.props;
+      const parent = $(target.parentElement);
+      const data = this.calculateData(series, this.props.show);
 
-    this.plot = $.plot(target, data, this.getOptions());
+      this.plot = $.plot(target, data, this.getOptions());
 
-    this.handleResize = (e) => {
-      if (!this.plot) return;
-      this.plot.resize();
-      this.plot.setupGrid();
-      this.plot.draw();
-    };
-
-    this.handleResize();
-
-    this.handleMouseOver = (...args) => {
-      if (this.props.onMouseOver) this.props.onMouseOver(...args, this.plot);
-    };
-
-    this.handleMouseLeave = (...args) => {
-      if (this.props.onMouseLeave) this.props.onMouseLeave(...args, this.plot);
-    };
-
-    $(target).on('plothover', this.handleMouseOver);
-    $(target).on('mouseleave', this.handleMouseLeave);
-
-    if (this.props.crosshair) {
-
-
-      this.handleThorPlotover = (e, pos, item, originalPlot) => {
-        if (this.plot !== originalPlot) {
-          this.plot.setCrosshair({ x: _.get(pos, 'x') });
-          this.props.plothover(e, pos, item);
-        }
+      this.handleResize = (e) => {
+        if (!this.plot) return;
+        this.plot.resize();
+        this.plot.setupGrid();
+        this.plot.draw();
       };
 
-      this.handlePlotover = (e, pos, item) => eventBus.trigger('thorPlotover', [pos, item, this.plot]);
-      this.handlePlotleave = (e) => eventBus.trigger('thorPlotleave');
-      this.handleThorPlotleave = (e) =>  {
-        this.plot.clearCrosshair();
-        if (this.props.plothover) this.props.plothover(e);
+      this.handleResize();
+      findDOMNode(this.refs.resize).addEventListener('resize', this.handleResize);
+
+      this.handleMouseOver = (...args) => {
+        if (this.props.onMouseOver) this.props.onMouseOver(...args, this.plot);
       };
 
-      $(target).on('plothover', this.handlePlotover);
-      $(target).on('mouseleave', this.handlePlotleave);
-      eventBus.on('thorPlotover', this.handleThorPlotover);
-      eventBus.on('thorPlotleave', this.handleThorPlotleave);
-    }
-
-    if (_.isFunction(this.props.plothover)) {
-      $(target).bind('plothover', this.props.plothover);
-    }
-
-    $(target).on('mouseleave', (e) => {
-      eventBus.trigger('thorPlotleave');
-    });
-
-    if (_.isFunction(this.props.onBrush)) {
-      this.brushChart = (e, ranges) => {
-        this.props.onBrush(ranges);
-        this.plot.clearSelection();
+      this.handleMouseLeave = (...args) => {
+        if (this.props.onMouseLeave) this.props.onMouseLeave(...args, this.plot);
       };
 
-      $(target).on('plotselected', this.brushChart);
-    }
+      $(target).on('plothover', this.handleMouseOver);
+      $(target).on('mouseleave', this.handleMouseLeave);
 
+      if (this.props.crosshair) {
+
+
+        this.handleThorPlotover = (e, pos, item, originalPlot) => {
+          if (this.plot !== originalPlot) {
+            this.plot.setCrosshair({ x: _.get(pos, 'x') });
+            this.props.plothover(e, pos, item);
+          }
+        };
+
+        this.handlePlotover = (e, pos, item) => eventBus.trigger('thorPlotover', [pos, item, this.plot]);
+        this.handlePlotleave = (e) => eventBus.trigger('thorPlotleave');
+        this.handleThorPlotleave = (e) =>  {
+          this.plot.clearCrosshair();
+          if (this.props.plothover) this.props.plothover(e);
+        };
+
+        $(target).on('plothover', this.handlePlotover);
+        $(target).on('mouseleave', this.handlePlotleave);
+        eventBus.on('thorPlotover', this.handleThorPlotover);
+        eventBus.on('thorPlotleave', this.handleThorPlotleave);
+      }
+
+      if (_.isFunction(this.props.plothover)) {
+        $(target).bind('plothover', this.props.plothover);
+      }
+
+      $(target).on('mouseleave', (e) => {
+        eventBus.trigger('thorPlotleave');
+      });
+
+      if (_.isFunction(this.props.onBrush)) {
+        this.brushChart = (e, ranges) => {
+          this.props.onBrush(ranges);
+          this.plot.clearSelection();
+        };
+
+        $(target).on('plotselected', this.brushChart);
+      }
+    }
   },
 
   render() {
@@ -225,7 +230,7 @@ const Chart = React.createClass({
       position: 'relative',
       display: 'flex',
       rowDirection: 'column',
-      flex: '1 0 auto'
+      flex: '1 0 auto',
     };
     return (
       <ResizeAware ref="resize" style={style}>

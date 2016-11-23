@@ -46,7 +46,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Chart = _react2.default.createClass({
   displayName: 'Chart',
-  componentWillMount: function componentWillMount(props) {},
+  getInitialState: function getInitialState() {
+    return { renderFlot: false };
+  },
   shouldComponentUpdate: function shouldComponentUpdate(props) {
     var _this = this;
 
@@ -79,10 +81,10 @@ var Chart = _react2.default.createClass({
       _events2.default.off('thorPlotover', this.handleThorPlotover);
       _events2.default.off('thorPlotleave', this.handleThorPlotleave);
     }
+    (0, _reactDom.findDOMNode)(this.refs.resize).removeEventListener('resize', this.handleResize);
   },
   componentWillUnmount: function componentWillUnmount() {
     this.shutdownChart();
-    (0, _reactDom.findDOMNode)(this.refs.resize).removeEventListener('resize', this.handleResize);
   },
   filterByShow: function filterByShow(show) {
     if (show) {
@@ -107,11 +109,12 @@ var Chart = _react2.default.createClass({
       this.plot.setData(this.calculateData(series, newProps.show));
       this.plot.setupGrid();
       this.plot.draw();
+    } else {
+      this.renderChart();
     }
   },
   componentDidMount: function componentDidMount() {
     this.renderChart();
-    (0, _reactDom.findDOMNode)(this.refs.resize).addEventListener('resize', this.handleResize);
   },
   componentDidUpdate: function componentDidUpdate() {
     this.shutdownChart();
@@ -179,92 +182,96 @@ var Chart = _react2.default.createClass({
   renderChart: function renderChart() {
     var _this2 = this;
 
-    var _props = this.props;
-    var min = _props.min;
-    var max = _props.max;
+    var resize = (0, _reactDom.findDOMNode)(this.refs.resize);
+    if (resize.clientWidth > 0 && resize.clientHeight > 0) {
+      var _props = this.props;
+      var min = _props.min;
+      var max = _props.max;
 
-    var type = this.props.type || 'line';
-    var target = this.refs.target;
-    var series = this.props.series;
+      var type = this.props.type || 'line';
+      var target = this.refs.target;
+      var series = this.props.series;
 
-    var parent = (0, _flot2.default)(target.parentElement);
-    var data = this.calculateData(series, this.props.show);
+      var parent = (0, _flot2.default)(target.parentElement);
+      var data = this.calculateData(series, this.props.show);
 
-    this.plot = _flot2.default.plot(target, data, this.getOptions());
+      this.plot = _flot2.default.plot(target, data, this.getOptions());
 
-    this.handleResize = function (e) {
-      if (!_this2.plot) return;
-      _this2.plot.resize();
-      _this2.plot.setupGrid();
-      _this2.plot.draw();
-    };
+      this.handleResize = function (e) {
+        if (!_this2.plot) return;
+        _this2.plot.resize();
+        _this2.plot.setupGrid();
+        _this2.plot.draw();
+      };
 
-    this.handleResize();
+      this.handleResize();
+      (0, _reactDom.findDOMNode)(this.refs.resize).addEventListener('resize', this.handleResize);
 
-    this.handleMouseOver = function () {
-      var _props2;
+      this.handleMouseOver = function () {
+        var _props2;
 
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      if (_this2.props.onMouseOver) (_props2 = _this2.props).onMouseOver.apply(_props2, args.concat([_this2.plot]));
-    };
-
-    this.handleMouseLeave = function () {
-      var _props3;
-
-      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
-
-      if (_this2.props.onMouseLeave) (_props3 = _this2.props).onMouseLeave.apply(_props3, args.concat([_this2.plot]));
-    };
-
-    (0, _flot2.default)(target).on('plothover', this.handleMouseOver);
-    (0, _flot2.default)(target).on('mouseleave', this.handleMouseLeave);
-
-    if (this.props.crosshair) {
-
-      this.handleThorPlotover = function (e, pos, item, originalPlot) {
-        if (_this2.plot !== originalPlot) {
-          _this2.plot.setCrosshair({ x: _lodash2.default.get(pos, 'x') });
-          _this2.props.plothover(e, pos, item);
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
         }
+
+        if (_this2.props.onMouseOver) (_props2 = _this2.props).onMouseOver.apply(_props2, args.concat([_this2.plot]));
       };
 
-      this.handlePlotover = function (e, pos, item) {
-        return _events2.default.trigger('thorPlotover', [pos, item, _this2.plot]);
-      };
-      this.handlePlotleave = function (e) {
-        return _events2.default.trigger('thorPlotleave');
-      };
-      this.handleThorPlotleave = function (e) {
-        _this2.plot.clearCrosshair();
-        if (_this2.props.plothover) _this2.props.plothover(e);
-      };
+      this.handleMouseLeave = function () {
+        var _props3;
 
-      (0, _flot2.default)(target).on('plothover', this.handlePlotover);
-      (0, _flot2.default)(target).on('mouseleave', this.handlePlotleave);
-      _events2.default.on('thorPlotover', this.handleThorPlotover);
-      _events2.default.on('thorPlotleave', this.handleThorPlotleave);
-    }
+        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+          args[_key2] = arguments[_key2];
+        }
 
-    if (_lodash2.default.isFunction(this.props.plothover)) {
-      (0, _flot2.default)(target).bind('plothover', this.props.plothover);
-    }
-
-    (0, _flot2.default)(target).on('mouseleave', function (e) {
-      _events2.default.trigger('thorPlotleave');
-    });
-
-    if (_lodash2.default.isFunction(this.props.onBrush)) {
-      this.brushChart = function (e, ranges) {
-        _this2.props.onBrush(ranges);
-        _this2.plot.clearSelection();
+        if (_this2.props.onMouseLeave) (_props3 = _this2.props).onMouseLeave.apply(_props3, args.concat([_this2.plot]));
       };
 
-      (0, _flot2.default)(target).on('plotselected', this.brushChart);
+      (0, _flot2.default)(target).on('plothover', this.handleMouseOver);
+      (0, _flot2.default)(target).on('mouseleave', this.handleMouseLeave);
+
+      if (this.props.crosshair) {
+
+        this.handleThorPlotover = function (e, pos, item, originalPlot) {
+          if (_this2.plot !== originalPlot) {
+            _this2.plot.setCrosshair({ x: _lodash2.default.get(pos, 'x') });
+            _this2.props.plothover(e, pos, item);
+          }
+        };
+
+        this.handlePlotover = function (e, pos, item) {
+          return _events2.default.trigger('thorPlotover', [pos, item, _this2.plot]);
+        };
+        this.handlePlotleave = function (e) {
+          return _events2.default.trigger('thorPlotleave');
+        };
+        this.handleThorPlotleave = function (e) {
+          _this2.plot.clearCrosshair();
+          if (_this2.props.plothover) _this2.props.plothover(e);
+        };
+
+        (0, _flot2.default)(target).on('plothover', this.handlePlotover);
+        (0, _flot2.default)(target).on('mouseleave', this.handlePlotleave);
+        _events2.default.on('thorPlotover', this.handleThorPlotover);
+        _events2.default.on('thorPlotleave', this.handleThorPlotleave);
+      }
+
+      if (_lodash2.default.isFunction(this.props.plothover)) {
+        (0, _flot2.default)(target).bind('plothover', this.props.plothover);
+      }
+
+      (0, _flot2.default)(target).on('mouseleave', function (e) {
+        _events2.default.trigger('thorPlotleave');
+      });
+
+      if (_lodash2.default.isFunction(this.props.onBrush)) {
+        this.brushChart = function (e, ranges) {
+          _this2.props.onBrush(ranges);
+          _this2.plot.clearSelection();
+        };
+
+        (0, _flot2.default)(target).on('plotselected', this.brushChart);
+      }
     }
   },
   render: function render() {
