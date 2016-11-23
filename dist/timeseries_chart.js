@@ -46,10 +46,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Chart = _react2.default.createClass({
   displayName: 'Chart',
-  getInitialState: function getInitialState() {
-    return { renderFlot: false };
-  },
-  shouldComponentUpdate: function shouldComponentUpdate(props) {
+  shouldComponentUpdate: function shouldComponentUpdate(props, state) {
     var _this = this;
 
     if (!this.plot) return true;
@@ -183,6 +180,7 @@ var Chart = _react2.default.createClass({
     var _this2 = this;
 
     var resize = (0, _reactDom.findDOMNode)(this.refs.resize);
+
     if (resize.clientWidth > 0 && resize.clientHeight > 0) {
       var _props = this.props;
       var min = _props.min;
@@ -198,10 +196,13 @@ var Chart = _react2.default.createClass({
       this.plot = _flot2.default.plot(target, data, this.getOptions());
 
       this.handleResize = function (e) {
-        if (!_this2.plot) return;
-        _this2.plot.resize();
-        _this2.plot.setupGrid();
-        _this2.plot.draw();
+        var resize = (0, _reactDom.findDOMNode)(_this2.refs.resize);
+        if (resize.clientHeight > 0 && resize.clientHeight > 0) {
+          if (!_this2.plot) return;
+          _this2.plot.resize();
+          _this2.plot.setupGrid();
+          _this2.plot.draw();
+        }
       };
 
       this.handleResize();

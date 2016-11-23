@@ -11,11 +11,7 @@ import colors from './colors';
 
 const Chart = React.createClass({
 
-  getInitialState() {
-    return { renderFlot: false };
-  },
-
-  shouldComponentUpdate(props) {
+  shouldComponentUpdate(props, state) {
     if (!this.plot) return true;
     if (props.reversed !== this.props.reversed) {
       return true;
@@ -152,6 +148,7 @@ const Chart = React.createClass({
 
   renderChart() {
     const resize = findDOMNode(this.refs.resize);
+
     if (resize.clientWidth > 0 && resize.clientHeight > 0) {
       const { min, max } = this.props;
       const type = this.props.type || 'line';
@@ -163,14 +160,18 @@ const Chart = React.createClass({
       this.plot = $.plot(target, data, this.getOptions());
 
       this.handleResize = (e) => {
-        if (!this.plot) return;
-        this.plot.resize();
-        this.plot.setupGrid();
-        this.plot.draw();
+        const resize = findDOMNode(this.refs.resize);
+        if (resize.clientHeight > 0 && resize.clientHeight > 0) {
+          if (!this.plot) return;
+          this.plot.resize();
+          this.plot.setupGrid();
+          this.plot.draw();
+        }
       };
 
       this.handleResize();
       findDOMNode(this.refs.resize).addEventListener('resize', this.handleResize);
+
 
       this.handleMouseOver = (...args) => {
         if (this.props.onMouseOver) this.props.onMouseOver(...args, this.plot);
