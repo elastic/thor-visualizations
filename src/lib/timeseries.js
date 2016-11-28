@@ -55,19 +55,23 @@ export default React.createClass({
     return values;
   },
 
-  updateLegend(pos) {
+  updateLegend(pos, item) {
     const values = {};
     if (pos) {
       this.props.series.forEach((row) => {
-        let closest;
         if (row.data && _.isArray(row.data)) {
-          for (let i = 0; i < row.data.length; i++) {
-            closest = i;
-            if (row.data[i] && pos.x < row.data[i][0]) break;
+          if (item && row.data[item.dataIndex][0] === item.datapoint[0]) {
+            values[row.id] = row.data[item.dataIndex][1];
+          } else {
+            let closest;
+            for (let i = 0; i < row.data.length; i++) {
+              closest = i;
+              if (row.data[i] && pos.x < row.data[i][0]) break;
+            }
+            if (!row.data[closest]) return values[row.id] = null;
+            const [ time, value ] = row.data[closest];
+            values[row.id] = value != null && value || null;
           }
-          if (!row.data[closest]) return values[row.id] = 0;
-          const [ time, value ] = row.data[closest];
-          values[row.id] = value || 0;
         }
       });
     } else {
@@ -94,7 +98,7 @@ export default React.createClass({
   },
 
   plothover(event, pos, item) {
-    this.updateLegend(pos);
+    this.updateLegend(pos, item);
   },
 
   handleHideClick() {

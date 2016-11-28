@@ -83,22 +83,26 @@ exports.default = _react2.default.createClass({
     });
     return values;
   },
-  updateLegend: function updateLegend(pos) {
+  updateLegend: function updateLegend(pos, item) {
     var values = {};
     if (pos) {
       this.props.series.forEach(function (row) {
-        var closest = void 0;
         if (row.data && _lodash2.default.isArray(row.data)) {
-          for (var i = 0; i < row.data.length; i++) {
-            closest = i;
-            if (row.data[i] && pos.x < row.data[i][0]) break;
-          }
-          if (!row.data[closest]) return values[row.id] = 0;
-          var _row$data$closest = row.data[closest];
-          var time = _row$data$closest[0];
-          var value = _row$data$closest[1];
+          if (item && row.data[item.dataIndex][0] === item.datapoint[0]) {
+            values[row.id] = row.data[item.dataIndex][1];
+          } else {
+            var closest = void 0;
+            for (var i = 0; i < row.data.length; i++) {
+              closest = i;
+              if (row.data[i] && pos.x < row.data[i][0]) break;
+            }
+            if (!row.data[closest]) return values[row.id] = null;
+            var _row$data$closest = row.data[closest];
+            var time = _row$data$closest[0];
+            var value = _row$data$closest[1];
 
-          values[row.id] = value || 0;
+            values[row.id] = value != null && value || null;
+          }
         }
       });
     } else {
@@ -122,7 +126,7 @@ exports.default = _react2.default.createClass({
     }
   },
   plothover: function plothover(event, pos, item) {
-    this.updateLegend(pos);
+    this.updateLegend(pos, item);
   },
   handleHideClick: function handleHideClick() {
     this.setState({ showLegend: !this.state.showLegend });
