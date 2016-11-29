@@ -88,7 +88,7 @@ exports.default = _react2.default.createClass({
     if (pos) {
       this.props.series.forEach(function (row) {
         if (row.data && _lodash2.default.isArray(row.data)) {
-          if (item && row.data[item.dataIndex][0] === item.datapoint[0]) {
+          if (item && row.data[item.dataIndex] && row.data[item.dataIndex][0] === item.datapoint[0]) {
             values[row.id] = row.data[item.dataIndex][1];
           } else {
             var closest = void 0;

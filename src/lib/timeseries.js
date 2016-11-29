@@ -60,7 +60,7 @@ export default React.createClass({
     if (pos) {
       this.props.series.forEach((row) => {
         if (row.data && _.isArray(row.data)) {
-          if (item && row.data[item.dataIndex][0] === item.datapoint[0]) {
+          if (item && row.data[item.dataIndex] && row.data[item.dataIndex][0] === item.datapoint[0]) {
             values[row.id] = row.data[item.dataIndex][1];
           } else {
             let closest;
