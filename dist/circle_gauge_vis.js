@@ -10,9 +10,9 @@ var _flot = require('./flot');
 
 var _flot2 = _interopRequireDefault(_flot);
 
-var _reactResizeAware = require('react-resize-aware');
+var _simianhackerReactResizeAware = require('simianhacker-react-resize-aware');
 
-var _reactResizeAware2 = _interopRequireDefault(_reactResizeAware);
+var _simianhackerReactResizeAware2 = _interopRequireDefault(_simianhackerReactResizeAware);
 
 var _lodash = require('lodash');
 
@@ -168,7 +168,7 @@ exports.default = _react2.default.createClass({
       props.circleBackground.stroke = this.props.innerColor;
     }
     return _react2.default.createElement(
-      _reactResizeAware2.default,
+      _simianhackerReactResizeAware2.default,
       { ref: 'resize', style: styles.resize },
       _react2.default.createElement(
         'div',

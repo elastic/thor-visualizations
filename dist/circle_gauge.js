@@ -26,9 +26,9 @@ var _get_value_by = require('./get_value_by');
 
 var _get_value_by2 = _interopRequireDefault(_get_value_by);
 
-var _reactResizeAware = require('react-resize-aware');
+var _simianhackerReactResizeAware = require('simianhacker-react-resize-aware');
 
-var _reactResizeAware2 = _interopRequireDefault(_reactResizeAware);
+var _simianhackerReactResizeAware2 = _interopRequireDefault(_simianhackerReactResizeAware);
 
 var _circle_gauge_vis = require('./circle_gauge_vis');
 
@@ -197,7 +197,7 @@ exports.default = _react2.default.createClass({
       'div',
       { className: className },
       _react2.default.createElement(
-        _reactResizeAware2.default,
+        _simianhackerReactResizeAware2.default,
         { className: 'thorCircleGauge__resize', ref: 'resize' },
         metrics,
         _react2.default.createElement(_circle_gauge_vis2.default, gaugeProps)

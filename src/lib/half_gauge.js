@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import $ from './flot';
 import getLastValue from './get_last_value';
 import getValueBy from './get_value_by';
-import ResizeAware from 'react-resize-aware';
+import ResizeAware from 'simianhacker-react-resize-aware';
 import HalfGaugeVis from './half_gauge_vis';
 import { findDOMNode } from 'react-dom';
 import reactcss from 'reactcss';

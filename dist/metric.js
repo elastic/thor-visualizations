@@ -12,9 +12,9 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 var _reactDom = require('react-dom');
 
-var _reactResizeAware = require('react-resize-aware');
+var _simianhackerReactResizeAware = require('simianhacker-react-resize-aware');
 
-var _reactResizeAware2 = _interopRequireDefault(_reactResizeAware);
+var _simianhackerReactResizeAware2 = _interopRequireDefault(_simianhackerReactResizeAware);
 
 var _get_last_value = require('./get_last_value');
 
@@ -204,7 +204,7 @@ exports.default = _react2.default.createClass({
       'div',
       { className: 'rhythm_metric', ref: 'container', style: styles.container },
       _react2.default.createElement(
-        _reactResizeAware2.default,
+        _simianhackerReactResizeAware2.default,
         { ref: 'resize', className: 'rhythm_metric__resize' },
         _react2.default.createElement(
           'div',

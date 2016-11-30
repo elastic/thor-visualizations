@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import $ from './flot';
-import ResizeAware from 'react-resize-aware';
+import ResizeAware from 'simianhacker-react-resize-aware';
 import _ from 'lodash';
 import { findDOMNode } from 'react-dom';
 import reactcss from 'reactcss';

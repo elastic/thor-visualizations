@@ -26,9 +26,9 @@ var _events = require('./events');
 
 var _events2 = _interopRequireDefault(_events);
 
-var _reactResizeAware = require('react-resize-aware');
+var _simianhackerReactResizeAware = require('simianhacker-react-resize-aware');
 
-var _reactResizeAware2 = _interopRequireDefault(_reactResizeAware);
+var _simianhackerReactResizeAware2 = _interopRequireDefault(_simianhackerReactResizeAware);
 
 var _reactcss = require('reactcss');
 
@@ -283,7 +283,7 @@ var Chart = _react2.default.createClass({
       flex: '1 0 auto'
     };
     return _react2.default.createElement(
-      _reactResizeAware2.default,
+      _simianhackerReactResizeAware2.default,
       { ref: 'resize', style: style },
       _react2.default.createElement('div', { ref: 'target', style: style })
     );

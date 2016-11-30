@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import $ from './flot';
 import eventBus from './events';
-import ResizeAware from 'react-resize-aware';
+import ResizeAware from 'simianhacker-react-resize-aware';
 import reactcss from 'reactcss';
 import calculateBarWidth from './calculate_bar_width';
 import colors from './colors';
