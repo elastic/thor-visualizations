@@ -1,6 +1,6 @@
 {
   "name": "@elastic/thor-visualizations",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Visualizations for Thor",
   "main": "dist/index.js",
   "scripts": {
