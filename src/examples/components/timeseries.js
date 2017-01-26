@@ -1,7 +1,7 @@
 import React from 'react';
 import { ResizableBox } from 'react-resizable';
 import moment from 'moment';
-import Timeseries from '../../lib/timeseries';
+import Timeseries from '../../components/timeseries';
 import generateData from '../lib/generate_data';
 import Color from 'color';
 import _ from 'lodash';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResizableBox } from 'react-resizable';
-import TopN from '../../lib/top_n';
+import TopN from '../../components/top_n';
 import numeral from 'numeral';
 import generateData from '../lib/generate_data';
 import getLastValue from '../../lib/get_last_value';
@@ -32,7 +32,7 @@ export default React.createClass({
         <h2>Top N Reversed</h2>
         <ResizableBox
           className="examples__box"
-          style={{backgroundColor: '#80c383'}}
+          style={{ backgroundColor: '#80c383' }}
           width={900}
           height={300}
           minConstraints={[200,150]}

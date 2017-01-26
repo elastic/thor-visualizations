@@ -1,8 +1,8 @@
 import React from 'react';
 import { ResizableBox } from 'react-resizable';
 import generateData from '../lib/generate_data';
-import CircleGauge from '../../lib/circle_gauge';
-import HalfGauge from '../../lib/half_gauge';
+import CircleGauge from '../../components/circle_gauge';
+import HalfGauge from '../../components/half_gauge';
 import Color from 'color';
 import _ from 'lodash';
 import numeral from 'numeral';

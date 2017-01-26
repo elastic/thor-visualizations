@@ -1,4 +1,4 @@
-var $ = require('jquery');
+const $ = require('jquery');
 if (window) window.jQuery = $;
 require('flot-charts/jquery.flot');
 require('flot-charts/jquery.flot.time');

@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const filter = require('gulp-filter');
 const less = require('gulp-less');
 const babel = require('gulp-babel');
 const path = require('path');
@@ -69,11 +70,12 @@ gulp.task('sync', function (done) {
 });
 
 gulp.task('js', () => {
-  return gulp.src('src/lib/**/*.js')
-  .pipe(babel({
-    presets: ['react', 'es2015-loose', 'stage-1'],
-    plugins: ['add-module-exports', 'dev-expression']
-  })).pipe(gulp.dest('dist'));
+  return gulp.src('src/**/*.js')
+    .pipe(filter(['src/components/*.js', 'src/lib/*.js', 'src/index.js']))
+    .pipe(babel({
+      presets: ['react', 'es2015-loose', 'stage-1'],
+      plugins: ['add-module-exports', 'dev-expression']
+    })).pipe(gulp.dest('dist'));
 });
 
 gulp.task('webpack', () => {

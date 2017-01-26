@@ -47,6 +47,7 @@
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-eslint": "^2.0.0",
+    "gulp-filter": "^5.0.0",
     "gulp-less": "^3.1.0",
     "gulp-webpack": "^1.5.0",
     "less": "^2.7.1",

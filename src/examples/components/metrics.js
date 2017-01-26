@@ -1,7 +1,7 @@
 import React from 'react';
 import { ResizableBox } from 'react-resizable';
 import generateData from '../lib/generate_data';
-import Metric from '../../lib/metric';
+import Metric from '../../components/metric';
 import Color from 'color';
 import _ from 'lodash';
 import numeral from 'numeral';
